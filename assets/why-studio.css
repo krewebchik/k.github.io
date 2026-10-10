@@ -1,27 +1,41 @@
-/* Изолированный редизайн раздела «Для кого сайт». */
+/* Блок «Для кого сайт?» (#why) — сетка карточек на волосяных линиях.
+   Файл подключается последним (content-loader.js) и намеренно использует
+   селекторы вида #why .audience-grid .aud-card, чтобы перекрывать
+   прежние правила #why из hero-polish.css и инлайновые .aud-card.
+   Разметка и тексты не меняются — только визуал. */
+
 #why {
-  --why-line: rgba(255, 255, 255, 0.16);
-  --why-paper: #deddd7;
+  --why-line: rgba(255, 255, 255, 0.12);
+  --why-line-soft: rgba(255, 255, 255, 0.07);
+  --why-card: #0a0a0a;
+  --why-card-hover: #101010;
+  --why-ink: #f1f1ef;
+  --why-ink-dim: #8e8e8a;
+  --why-pad: clamp(1.4rem, 2.4vw, 2.1rem);
 }
+
+/* ---------- Шапка секции ---------- */
 
 #why .section-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  align-items: start;
+  align-items: end;
   gap: 1.5rem;
   max-width: none;
-  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: clamp(2.2rem, 4.5vw, 3.5rem);
 }
 
 #why .audience-label {
   margin: 0;
-  padding-top: 0.6rem;
+  padding-top: 0;
 }
 
 #why .section-title {
-  max-width: 15ch;
-  font-size: clamp(2.5rem, 5.5vw, 4.6rem);
+  max-width: 16ch;
+  font-size: clamp(2.4rem, 5.2vw, 4.4rem);
 }
+
+/* ---------- Решётка ---------- */
 
 #why .audience-grid {
   display: grid;
@@ -30,391 +44,232 @@
   gap: 1px;
   padding: 1px;
   border: 0;
-  background: var(--why-line);
+  background: var(--why-line); /* просветы 1px между карточками = волосяные линии */
   isolation: isolate;
 }
 
-#why .aud-card,
-#why .aud-card-wide {
+/* ---------- Карточка ---------- */
+
+#why .audience-grid .aud-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  position: relative;
   grid-column: span 3;
   min-width: 0;
-  min-height: 30rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  gap: 0;
+  min-height: clamp(16rem, 25vw, 20rem);
+  padding: var(--why-pad);
   border: 0;
   border-radius: 0;
-  background: #0b0b0b;
+  background-color: var(--why-card);
+  background-image: radial-gradient(
+    120% 85% at 10% -10%,
+    rgba(255, 255, 255, 0.05),
+    transparent 62%
+  );
   box-shadow: none;
   overflow: hidden;
   isolation: isolate;
-  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+  transition:
+    opacity 800ms var(--ease) var(--why-d, 0s),
+    transform 800ms var(--ease) var(--why-d, 0s),
+    background-color 400ms ease,
+    box-shadow 400ms ease;
 }
 
-/* Две широкие панели и три более компактные — единая система. */
-#why .aud-card:nth-child(n + 3) {
-  grid-column: span 2;
-  min-height: 29rem;
-}
+#why .audience-grid .aud-card { --why-d: 0s; }
+#why .audience-grid .aud-card:nth-child(2) { --why-d: 60ms; }
+#why .audience-grid .aud-card:nth-child(3) { --why-d: 120ms; }
+#why .audience-grid .aud-card:nth-child(4) { --why-d: 180ms; }
+#why .audience-grid .aud-card:nth-child(5) { --why-d: 240ms; }
 
-#why .aud-card::before {
+/* Номер направления */
+#why .audience-grid .aud-card::before {
   content: "01";
   position: absolute;
-  inset: 1.5rem auto auto 1.5rem;
+  top: var(--why-pad);
+  left: var(--why-pad);
   display: block;
   width: auto;
   height: auto;
-  margin: 0;
-  color: #92928d;
-  font: 400 0.7rem/1 monospace;
-  letter-spacing: 0.08em;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.38);
   transform: none;
   pointer-events: none;
   z-index: 3;
+  transition: color 300ms ease;
 }
 
-#why .aud-card:nth-child(2)::before { content: "02"; }
-#why .aud-card:nth-child(3)::before { content: "03"; }
-#why .aud-card:nth-child(4)::before { content: "04"; }
-#why .aud-card:nth-child(5)::before { content: "05"; }
+#why .audience-grid .aud-card:nth-child(2)::before { content: "02"; }
+#why .audience-grid .aud-card:nth-child(3)::before { content: "03"; }
+#why .audience-grid .aud-card:nth-child(4)::before { content: "04"; }
+#why .audience-grid .aud-card:nth-child(5)::before { content: "05"; }
 
-/* Небольшая регистрационная метка в противоположном углу. */
-#why .aud-card::after {
+/* Технический маркер в правом верхнем углу */
+#why .audience-grid .aud-card::after {
   content: "";
   position: absolute;
-  inset: 1.45rem 1.5rem auto auto;
+  top: calc(var(--why-pad) + 0.1rem);
+  right: var(--why-pad);
   width: 11px;
   height: 11px;
   border: 0;
   border-radius: 0;
   background:
-    linear-gradient(#777, #777) center / 1px 100% no-repeat,
-    linear-gradient(#777, #777) center / 100% 1px no-repeat;
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)) center / 1px 100% no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)) center / 100% 1px no-repeat;
   filter: none;
-  opacity: 1;
+  opacity: 0.55;
   transform: none;
-  transition: none;
+  transform-origin: center;
   pointer-events: none;
+  z-index: 3;
+  transition: opacity 300ms ease, transform 500ms var(--ease);
 }
 
-/* Исходный контейнер иконки становится графическим полотном.
-   Он уже имеет aria-hidden, тексты карточек не затрагиваются. */
-#why .aud-card .aud-icon {
-  position: relative;
+/* Иконка из разметки — крупный водяной знак, обрезанный углом */
+#why .audience-grid .aud-card .aud-icon {
+  position: absolute;
+  right: clamp(-2rem, -2vw, -1rem);
+  bottom: clamp(-2rem, -2vw, -1rem);
   display: block;
-  flex: 0 0 13.5rem;
-  align-self: stretch;
-  width: auto;
-  height: 13.5rem;
-  margin: 1rem 0 1.8rem;
+  width: clamp(6.5rem, 11vw, 9rem);
+  height: clamp(6.5rem, 11vw, 9rem);
+  margin: 0;
+  padding: 0;
   border: 0;
   border-radius: 0;
-  color: var(--why-paper);
   background: none;
   box-shadow: none;
-  overflow: hidden;
+  color: rgba(255, 255, 255, 0.1);
+  overflow: visible;
   pointer-events: none;
+  z-index: 1;
+  transition: transform 700ms var(--ease), color 400ms ease;
 }
 
-#why .aud-icon svg {
-  display: none;
+#why .audience-grid .aud-card .aud-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  stroke-width: 1;
 }
 
-#why .aud-icon::before,
-#why .aud-icon::after {
-  content: "";
-  position: absolute;
-  box-sizing: border-box;
-  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* 01. Личный бренд: отпечаток и смещённый контур. */
-#why .aud-card:nth-child(1) .aud-icon {
-  background:
-    linear-gradient(#262626, #262626) 50% 50% / 88% 1px no-repeat,
-    linear-gradient(#262626, #262626) 50% 50% / 1px 92% no-repeat;
-}
-
-#why .aud-card:nth-child(1) .aud-icon::before {
-  width: 9.4rem;
-  height: 11.6rem;
-  left: calc(50% - 5.3rem);
-  top: 0.6rem;
-  border: 1px solid #a6a69f;
-  border-radius: 48% 48% 42% 42%;
-  background: repeating-radial-gradient(
-    ellipse at 50% 48%,
-    transparent 0 5px,
-    rgba(222, 221, 215, 0.72) 6px 7px,
-    transparent 8px 12px
-  );
-  transform: rotate(-18deg);
-}
-
-#why .aud-card:nth-child(1) .aud-icon::after {
-  width: 9.4rem;
-  height: 11.6rem;
-  left: calc(50% - 3.8rem);
-  top: 0.6rem;
-  border: 1px solid #5e5e58;
-  border-radius: 48% 48% 42% 42%;
-  transform: rotate(18deg);
-}
-
-/* 02. Онлайн-продукт: структура интерфейса в перспективе. */
-#why .aud-card:nth-child(2) .aud-icon {
-  perspective: 650px;
-}
-
-#why .aud-card:nth-child(2) .aud-icon::before {
-  inset: 1.2rem 12% 1.2rem;
-  border: 1px solid #a2a29b;
-  background:
-    linear-gradient(#bdbdb5, #bdbdb5) 14% 18% / 28% 3px no-repeat,
-    linear-gradient(#686863, #686863) 16% 27% / 42% 1px no-repeat,
-    linear-gradient(#deddd7, #deddd7) 14% 74% / 24% 36% no-repeat,
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 18px,
-      #323230 19px 20px
-    ) 83% 72% / 48% 45% no-repeat,
-    #111;
-  box-shadow: 12px 12px 0 -1px #0b0b0b, 12px 12px 0 #50504c;
-  transform: rotateY(-22deg) rotateX(12deg) rotateZ(-6deg);
-}
-
-#why .aud-card:nth-child(2) .aud-icon::after {
-  inset: 0.3rem 7% 0.3rem;
-  border: 1px dashed #333330;
-  transform: rotateY(-22deg) rotateX(12deg) rotateZ(-6deg);
-}
-
-/* 03. Любой проект: пересечение модульных плоскостей. */
-#why .aud-card:nth-child(3) .aud-icon::before {
-  width: 8.5rem;
-  height: 8.5rem;
-  top: 2.1rem;
-  left: calc(50% - 4.25rem);
-  border: 1px solid #b5b5ad;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 20px,
-      #686862 21px 22px
-    );
-  transform: rotate(-25deg);
-}
-
-#why .aud-card:nth-child(3) .aud-icon::after {
-  width: 8.5rem;
-  height: 8.5rem;
-  top: 2.1rem;
-  left: calc(50% - 4.25rem);
-  border: 1px solid #b5b5ad;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0 20px,
-    rgba(222, 221, 215, 0.55) 21px 22px
-  );
-  transform: rotate(25deg);
-}
-
-/* 04. Услуги: непрерывная связь двух элементов. */
-#why .aud-card:nth-child(4) .aud-icon::before,
-#why .aud-card:nth-child(4) .aud-icon::after {
-  width: 6.5rem;
-  height: 9.3rem;
-  top: 1.8rem;
-  border: 1px solid #b3b3ab;
-  border-radius: 5rem;
-  background: repeating-radial-gradient(
-    ellipse at center,
-    transparent 0 7px,
-    rgba(222, 221, 215, 0.4) 8px 9px,
-    transparent 10px 15px
-  );
-}
-
-#why .aud-card:nth-child(4) .aud-icon::before {
-  left: calc(50% - 5.15rem);
-  transform: rotate(-36deg);
-}
-
-#why .aud-card:nth-child(4) .aud-icon::after {
-  left: calc(50% - 1.35rem);
-  transform: rotate(36deg);
-}
-
-/* 05. Бизнес: архитектурная система, а не график обещаний. */
-#why .aud-card:nth-child(5) .aud-icon {
-  perspective: 700px;
-}
-
-#why .aud-card:nth-child(5) .aud-icon::before {
-  width: 8rem;
-  height: 10rem;
-  left: calc(50% - 4rem);
-  top: 1.4rem;
-  border: 1px solid #bab ab2;
-  border-color: #babab2;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 23px,
-      #9a9a92 24px 25px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      #141414 0 23px,
-      #777770 24px 25px
-    );
-  transform: rotateY(-32deg) rotateX(15deg) rotateZ(12deg);
-}
-
-#why .aud-card:nth-child(5) .aud-icon::after {
-  width: 8rem;
-  height: 10rem;
-  left: calc(50% - 4rem + 14px);
-  top: calc(1.4rem - 14px);
-  border-top: 1px solid #666660;
-  border-right: 1px solid #666660;
-  transform: rotateY(-32deg) rotateX(15deg) rotateZ(12deg);
-}
-
-/* Единая типографика для всех пяти направлений. */
-#why .aud-card h3,
-#why .aud-card-wide h3 {
+/* Заголовок: прижат к низу карточки, отделён волосяной линией */
+#why .audience-grid .aud-card h3 {
+  position: relative;
+  z-index: 2;
+  grid-area: auto;
   align-self: stretch;
   max-width: none;
-  margin: 0;
-  padding: 0 0 1rem;
-  border-bottom: 1px solid var(--why-line);
-  font-family: var(--body);
-  font-size: clamp(1.45rem, 2.5vw, 2rem);
-  font-weight: 500;
-  font-style: normal;
-  line-height: 1.15;
-  letter-spacing: -0.045em;
-  text-transform: none;
-  overflow-wrap: normal;
-  hyphens: auto;
-  color: #eeede8;
+  margin: auto 0 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--why-line);
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  color: var(--why-ink);
 }
 
-#why .aud-card p,
-#why .aud-card-wide p {
-  align-self: stretch;
-  max-width: 43ch;
-  margin: 1rem 0 0;
+#why .audience-grid .aud-card p {
+  position: relative;
+  z-index: 2;
+  max-width: 34ch;
+  margin: 0.85rem 0 0;
   padding: 0;
   font-size: 0.94rem;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.6;
   letter-spacing: -0.01em;
-  color: #a6a6a0;
+  color: var(--why-ink-dim);
   overflow-wrap: break-word;
-  transition: none;
+  transition: color 300ms ease;
 }
 
-#why .aud-card:hover {
-  border: 0;
-  background: #0b0b0b;
-  box-shadow: none;
+/* ---------- Широкая карточка: заголовок слева, текст справа ---------- */
+
+#why .audience-grid .aud-card-wide {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: end;
+  column-gap: clamp(1.5rem, 5vw, 4.5rem);
+  grid-column: 1 / -1;
+  min-height: clamp(13rem, 19vw, 17rem);
+  padding: clamp(1.6rem, 3vw, 2.6rem);
+  background-color: #0d0d0d;
 }
 
-#why .aud-card.in:hover {
-  transform: none;
+#why .audience-grid .aud-card-wide h3 {
+  grid-column: 1;
+  max-width: 18ch;
+  margin: 0;
+  padding-top: 1.1rem;
+  border-top-color: rgba(255, 255, 255, 0.2);
+  font-size: clamp(1.7rem, 3.5vw, 2.7rem);
 }
 
-#why .aud-card:hover::before {
-  color: #92928d;
+#why .audience-grid .aud-card-wide p {
+  grid-column: 2;
+  max-width: 46ch;
+  margin: 0 0 0.2rem;
+  font-size: 0.98rem;
 }
 
-#why .aud-card:hover::after {
-  transform: none;
+#why .audience-grid .aud-card-wide .aud-icon {
+  width: clamp(8rem, 16vw, 13rem);
+  height: clamp(8rem, 16vw, 13rem);
 }
 
-#why .aud-card:hover .aud-icon {
-  border: 0;
-  background-color: transparent;
-  box-shadow: none;
-}
+/* ---------- Ховер: только свет и детали, без сдвига карточки ---------- */
 
-#why .aud-card:hover p {
-  color: #a6a6a0;
-}
-
-/* Движение только внутри иллюстраций, без прыгающих карточек. */
 @media (hover: hover) and (pointer: fine) {
-  #why .aud-card:nth-child(1):hover .aud-icon::before {
-    transform: rotate(-8deg);
+  #why .audience-grid .aud-card:hover {
+    background-color: var(--why-card-hover);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
-  #why .aud-card:nth-child(1):hover .aud-icon::after {
-    transform: rotate(8deg);
+  #why .audience-grid .aud-card:hover::before {
+    color: #fff;
   }
 
-  #why .aud-card:nth-child(2):hover .aud-icon::before,
-  #why .aud-card:nth-child(2):hover .aud-icon::after {
-    transform: rotateY(-10deg) rotateX(5deg) rotateZ(-3deg);
+  #why .audience-grid .aud-card:hover::after {
+    opacity: 1;
+    transform: scale(1.28);
   }
 
-  #why .aud-card:nth-child(3):hover .aud-icon::before {
-    transform: rotate(-40deg);
+  #why .audience-grid .aud-card:hover .aud-icon {
+    color: rgba(255, 255, 255, 0.2);
+    transform: translate(-6px, -6px) rotate(-6deg);
   }
 
-  #why .aud-card:nth-child(3):hover .aud-icon::after {
-    transform: rotate(40deg);
-  }
-
-  #why .aud-card:nth-child(4):hover .aud-icon::before {
-    transform: translateX(6px) rotate(-28deg);
-  }
-
-  #why .aud-card:nth-child(4):hover .aud-icon::after {
-    transform: translateX(-6px) rotate(28deg);
-  }
-
-  #why .aud-card:nth-child(5):hover .aud-icon::before,
-  #why .aud-card:nth-child(5):hover .aud-icon::after {
-    transform: rotateY(-18deg) rotateX(8deg) rotateZ(6deg);
+  #why .audience-grid .aud-card:hover p {
+    color: #b4b4b0;
   }
 }
 
-@media (max-width: 979px) {
-  #why .aud-card,
-  #why .aud-card:nth-child(n + 3) {
-    grid-column: span 3;
-    min-height: 29rem;
+#why .audience-grid .aud-card.in:hover {
+  transform: none; /* карточка не прыгает, всё движение — внутри */
+}
+
+/* ---------- Адаптив ---------- */
+
+@media (max-width: 899px) {
+  #why .audience-grid .aud-card,
+  #why .audience-grid .aud-card-wide {
+    grid-column: span 6;
+    min-height: clamp(13rem, 30vw, 17rem);
   }
 
-  #why .aud-card:last-child {
-    grid-column: 1 / -1;
-    display: grid;
+  #why .audience-grid .aud-card-wide {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: 1fr auto auto 1fr;
-    column-gap: 2rem;
-    min-height: 20rem;
-  }
-
-  #why .aud-card:last-child .aud-icon {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    align-self: center;
-    margin: 0;
-  }
-
-  #why .aud-card:last-child h3 {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  #why .aud-card:last-child p {
-    grid-column: 2;
-    grid-row: 3;
+    column-gap: clamp(1.25rem, 4vw, 2.5rem);
   }
 }
 
@@ -424,51 +279,56 @@
     gap: 1rem;
   }
 
-  #why .audience-label {
-    padding-top: 0;
+  #why .section-title {
+    font-size: clamp(2.1rem, 10vw, 3rem);
   }
 
-  #why .audience-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  #why .aud-card,
-  #why .aud-card:nth-child(n + 3),
-  #why .aud-card:last-child {
-    display: flex;
-    grid-column: 1;
+  #why .audience-grid .aud-card {
     min-height: 0;
-    padding: 1.5rem;
+    padding: 1.4rem 1.3rem 1.6rem;
   }
 
-  #why .aud-card .aud-icon,
-  #why .aud-card:last-child .aud-icon {
-    align-self: stretch;
-    flex-basis: 12.5rem;
-    height: 12.5rem;
-    margin: 1rem 0 1.5rem;
+  #why .audience-grid .aud-card .aud-icon {
+    width: 5.5rem;
+    height: 5.5rem;
   }
 
-  #why .aud-card h3,
-  #why .aud-card-wide h3 {
-    font-size: 1.7rem;
+  #why .audience-grid .aud-card-wide {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem 1.3rem 1.7rem;
   }
 
-  #why .aud-card p {
+  #why .audience-grid .aud-card-wide h3 {
     max-width: none;
-    font-size: 0.94rem;
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+
+  #why .audience-grid .aud-card-wide p {
+    max-width: none;
+    margin-top: 0.9rem;
   }
 }
 
+@media (max-width: 380px) {
+  #why .audience-grid .aud-card h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* ---------- Без анимаций ---------- */
+
 @media (prefers-reduced-motion: reduce) {
-  #why .aud-card,
-  #why .aud-icon::before,
-  #why .aud-icon::after {
+  #why .audience-grid .aud-card,
+  #why .audience-grid .aud-card::before,
+  #why .audience-grid .aud-card::after,
+  #why .audience-grid .aud-card .aud-icon,
+  #why .audience-grid .aud-card p {
     transition: none !important;
   }
 
-  #why .aud-icon::before,
-  #why .aud-icon::after {
+  #why .audience-grid .aud-card .aud-icon {
     transform: none !important;
   }
 }
