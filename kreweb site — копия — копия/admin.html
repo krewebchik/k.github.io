@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreweb — Админка</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="assets/supabase-config.js" defer></script>
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-2: #0e0e0e;
+      --line: rgba(255,255,255,0.1);
+      --text: #f5f5f5;
+      --mute: #8a8a8a;
+      --accent: #ffffff;
+      --danger: #ff6b6b;
+      --ok: #57d38c;
+      --radius: 12px;
+      --body: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.5;
+    }
+    .wrap { width: min(100%, 56rem); margin-inline: auto; padding: 2rem 1.25rem 5rem; }
+
+    /* Login screen */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .login-box {
+      width: min(100%, 22rem);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-2);
+      padding: 2rem 1.75rem;
+    }
+    .login-box h1 { font-size: 1.15rem; margin: 0 0 1.5rem; letter-spacing: -0.01em; }
+    label { display: block; font-size: 0.82rem; color: var(--mute); margin: 0.9rem 0 0.35rem; }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0a0a0a;
+      color: var(--text);
+      font: inherit;
+    }
+    input:focus, textarea:focus { outline: 2px solid rgba(255,255,255,0.35); outline-offset: 1px; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.9);
+      background: #fff;
+      color: #050505;
+      border-radius: 999px;
+      padding: 0.65rem 1.3rem;
+      font-weight: 600;
+      transition: opacity 0.2s ease;
+    }
+    button:hover { opacity: 0.85; }
+    button:disabled { opacity: 0.4; cursor: default; }
+    button.ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line);
+    }
+    .login-submit { width: 100%; margin-top: 1.4rem; }
+    .msg { font-size: 0.85rem; margin-top: 0.9rem; min-height: 1.2em; }
+    .msg.error { color: var(--danger); }
+    .msg.ok { color: var(--ok); }
+
+    /* Editor screen */
+    .editor-screen { display: none; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(5,5,5,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar h1 { font-size: 1rem; margin: 0; }
+    .topbar-actions { display: flex; align-items: center; gap: 0.7rem; }
+    .topbar .msg { min-height: 0; margin: 0; }
+
+    .section-block { margin-top: 2.25rem; }
+    .section-block h2 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--mute);
+      margin: 0 0 0.9rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .field { margin-bottom: 1.1rem; }
+    .field label { color: var(--text); font-size: 0.88rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .field .hint { color: var(--mute); font-size: 0.76rem; font-weight: 400; margin-left: 0.4rem; }
+    textarea {
+      width: 100%;
+      min-height: 3.4rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0a0a0a;
+      color: var(--text);
+      font: inherit;
+      resize: vertical;
+    }
+    textarea.dirty { border-color: rgba(255,255,255,0.5); }
+    .loading, .empty { color: var(--mute); padding: 2rem 0; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="login-screen" id="login-screen">
+    <div class="login-box">
+      <h1>Вход в админку Kreweb</h1>
+      <form id="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="username" required />
+        <label for="password">Пароль</label>
+        <input type="password" id="password" autocomplete="current-password" required />
+        <button type="submit" class="login-submit" id="login-btn">Войти</button>
+        <p class="msg" id="login-msg"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="editor-screen" id="editor-screen">
+    <div class="topbar">
+      <h1>Редактирование текстов сайта</h1>
+      <div class="topbar-actions">
+        <p class="msg" id="save-msg"></p>
+        <button id="save-btn" disabled>Сохранить изменения</button>
+        <button class="ghost" id="logout-btn">Выйти</button>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="loading" id="loading">Загрузка контента…</div>
+      <div id="sections"></div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!window.supabase || !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+        document.getElementById("login-msg").textContent =
+          "Не настроен assets/supabase-config.js (нет URL/ключа Supabase).";
+        document.getElementById("login-msg").classList.add("error");
+        return;
+      }
+
+      const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+      const loginScreen = document.getElementById("login-screen");
+      const editorScreen = document.getElementById("editor-screen");
+      const loginForm = document.getElementById("login-form");
+      const loginBtn = document.getElementById("login-btn");
+      const loginMsg = document.getElementById("login-msg");
+      const logoutBtn = document.getElementById("logout-btn");
+      const saveBtn = document.getElementById("save-btn");
+      const saveMsg = document.getElementById("save-msg");
+      const sectionsEl = document.getElementById("sections");
+      const loadingEl = document.getElementById("loading");
+
+      // Порядок разделов на странице сайта (таблица не гарантирует нужный порядок сама по себе)
+      const SECTION_ORDER = [
+        "Главный экран",
+        "Зачем нужен сайт",
+        "Для кого сайт",
+        "Процесс работы",
+        "Проекты",
+        "Финальный призыв",
+        "Футер",
+      ];
+
+      const dirty = new Map(); // key -> new value
+
+      function setSaveMsg(text, kind) {
+        saveMsg.textContent = text;
+        saveMsg.className = "msg" + (kind ? " " + kind : "");
+      }
+
+      function updateSaveBtn() {
+        saveBtn.disabled = dirty.size === 0;
+      }
+
+      async function loadContent() {
+        loadingEl.style.display = "block";
+        sectionsEl.innerHTML = "";
+        dirty.clear();
+        updateSaveBtn();
+
+        const { data, error } = await client
+          .from("content")
+          .select("key, value, label, section, type, sort_order");
+
+        loadingEl.style.display = "none";
+
+        if (error) {
+          sectionsEl.innerHTML = `<div class="empty">Ошибка загрузки: ${error.message}</div>`;
+          return;
+        }
+        if (!data || data.length === 0) {
+          sectionsEl.innerHTML = `<div class="empty">В таблице content пока нет строк. Выполните supabase-setup.sql.</div>`;
+          return;
+        }
+
+        const bySection = new Map();
+        data.forEach((row) => {
+          const sec = row.section || "Без раздела";
+          if (!bySection.has(sec)) bySection.set(sec, []);
+          bySection.get(sec).push(row);
+        });
+
+        const sections = [...bySection.keys()].sort((a, b) => {
+          const ia = SECTION_ORDER.indexOf(a);
+          const ib = SECTION_ORDER.indexOf(b);
+          return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+        });
+
+        sections.forEach((sec) => {
+          const rows = bySection.get(sec).sort((a, b) => a.sort_order - b.sort_order);
+          const block = document.createElement("div");
+          block.className = "section-block";
+          const h2 = document.createElement("h2");
+          h2.textContent = sec;
+          block.appendChild(h2);
+
+          rows.forEach((row) => {
+            const field = document.createElement("div");
+            field.className = "field";
+
+            const label = document.createElement("label");
+            label.textContent = row.label || row.key;
+            if (row.type === "html") {
+              const hint = document.createElement("span");
+              hint.className = "hint";
+              hint.textContent = "(каждая новая строка — перенос на сайте)";
+              label.appendChild(hint);
+            }
+            field.appendChild(label);
+
+            const textarea = document.createElement("textarea");
+            textarea.value = row.value || "";
+            textarea.dataset.key = row.key;
+            textarea.rows = row.type === "html" ? 2 : Math.min(6, Math.max(2, Math.ceil((row.value || "").length / 60)));
+            textarea.addEventListener("input", () => {
+              if (textarea.value !== (row.value || "")) {
+                dirty.set(row.key, textarea.value);
+                textarea.classList.add("dirty");
+              } else {
+                dirty.delete(row.key);
+                textarea.classList.remove("dirty");
+              }
+              updateSaveBtn();
+              setSaveMsg("", "");
+            });
+            field.appendChild(textarea);
+            block.appendChild(field);
+          });
+
+          sectionsEl.appendChild(block);
+        });
+      }
+
+      async function saveChanges() {
+        if (dirty.size === 0) return;
+        saveBtn.disabled = true;
+        setSaveMsg("Сохранение…", "");
+
+        const updates = [...dirty.entries()].map(([key, value]) =>
+          client.from("content").update({ value }).eq("key", key)
+        );
+
+        const results = await Promise.all(updates);
+        const failed = results.filter((r) => r.error);
+
+        if (failed.length > 0) {
+          setSaveMsg("Ошибка при сохранении: " + failed[0].error.message, "error");
+          saveBtn.disabled = false;
+          return;
+        }
+
+        setSaveMsg("Сохранено ✓", "ok");
+        document.querySelectorAll("textarea.dirty").forEach((t) => t.classList.remove("dirty"));
+        dirty.clear();
+        updateSaveBtn();
+      }
+
+      function showEditor() {
+        loginScreen.style.display = "none";
+        editorScreen.style.display = "block";
+        loadContent();
+      }
+
+      function showLogin() {
+        editorScreen.style.display = "none";
+        loginScreen.style.display = "flex";
+        loginForm.reset();
+        loginBtn.disabled = false;
+      }
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loginBtn.disabled = true;
+        loginMsg.textContent = "";
+        loginMsg.className = "msg";
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const { error } = await client.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          loginMsg.textContent = "Не удалось войти: " + error.message;
+          loginMsg.classList.add("error");
+          loginBtn.disabled = false;
+          return;
+        }
+        showEditor();
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        await client.auth.signOut();
+        showLogin();
+      });
+
+      saveBtn.addEventListener("click", saveChanges);
+
+      client.auth.getSession().then(({ data }) => {
+        if (data.session) {
+          showEditor();
+        } else {
+          showLogin();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

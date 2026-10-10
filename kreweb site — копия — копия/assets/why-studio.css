@@ -1,0 +1,474 @@
+/* Изолированный редизайн раздела «Для кого сайт». */
+#why {
+  --why-line: rgba(255, 255, 255, 0.16);
+  --why-paper: #deddd7;
+}
+
+#why .section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 1.5rem;
+  max-width: none;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+#why .audience-label {
+  margin: 0;
+  padding-top: 0.6rem;
+}
+
+#why .section-title {
+  max-width: 15ch;
+  font-size: clamp(2.5rem, 5.5vw, 4.6rem);
+}
+
+#why .audience-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  gap: 1px;
+  padding: 1px;
+  border: 0;
+  background: var(--why-line);
+  isolation: isolate;
+}
+
+#why .aud-card,
+#why .aud-card-wide {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  grid-column: span 3;
+  min-width: 0;
+  min-height: 30rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  background: #0b0b0b;
+  box-shadow: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+}
+
+/* Две широкие панели и три более компактные — единая система. */
+#why .aud-card:nth-child(n + 3) {
+  grid-column: span 2;
+  min-height: 29rem;
+}
+
+#why .aud-card::before {
+  content: "01";
+  position: absolute;
+  inset: 1.5rem auto auto 1.5rem;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  color: #92928d;
+  font: 400 0.7rem/1 monospace;
+  letter-spacing: 0.08em;
+  transform: none;
+  pointer-events: none;
+  z-index: 3;
+}
+
+#why .aud-card:nth-child(2)::before { content: "02"; }
+#why .aud-card:nth-child(3)::before { content: "03"; }
+#why .aud-card:nth-child(4)::before { content: "04"; }
+#why .aud-card:nth-child(5)::before { content: "05"; }
+
+/* Небольшая регистрационная метка в противоположном углу. */
+#why .aud-card::after {
+  content: "";
+  position: absolute;
+  inset: 1.45rem 1.5rem auto auto;
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(#777, #777) center / 1px 100% no-repeat,
+    linear-gradient(#777, #777) center / 100% 1px no-repeat;
+  filter: none;
+  opacity: 1;
+  transform: none;
+  transition: none;
+  pointer-events: none;
+}
+
+/* Исходный контейнер иконки становится графическим полотном.
+   Он уже имеет aria-hidden, тексты карточек не затрагиваются. */
+#why .aud-card .aud-icon {
+  position: relative;
+  display: block;
+  flex: 0 0 13.5rem;
+  align-self: stretch;
+  width: auto;
+  height: 13.5rem;
+  margin: 1rem 0 1.8rem;
+  border: 0;
+  border-radius: 0;
+  color: var(--why-paper);
+  background: none;
+  box-shadow: none;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#why .aud-icon svg {
+  display: none;
+}
+
+#why .aud-icon::before,
+#why .aud-icon::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 01. Личный бренд: отпечаток и смещённый контур. */
+#why .aud-card:nth-child(1) .aud-icon {
+  background:
+    linear-gradient(#262626, #262626) 50% 50% / 88% 1px no-repeat,
+    linear-gradient(#262626, #262626) 50% 50% / 1px 92% no-repeat;
+}
+
+#why .aud-card:nth-child(1) .aud-icon::before {
+  width: 9.4rem;
+  height: 11.6rem;
+  left: calc(50% - 5.3rem);
+  top: 0.6rem;
+  border: 1px solid #a6a69f;
+  border-radius: 48% 48% 42% 42%;
+  background: repeating-radial-gradient(
+    ellipse at 50% 48%,
+    transparent 0 5px,
+    rgba(222, 221, 215, 0.72) 6px 7px,
+    transparent 8px 12px
+  );
+  transform: rotate(-18deg);
+}
+
+#why .aud-card:nth-child(1) .aud-icon::after {
+  width: 9.4rem;
+  height: 11.6rem;
+  left: calc(50% - 3.8rem);
+  top: 0.6rem;
+  border: 1px solid #5e5e58;
+  border-radius: 48% 48% 42% 42%;
+  transform: rotate(18deg);
+}
+
+/* 02. Онлайн-продукт: структура интерфейса в перспективе. */
+#why .aud-card:nth-child(2) .aud-icon {
+  perspective: 650px;
+}
+
+#why .aud-card:nth-child(2) .aud-icon::before {
+  inset: 1.2rem 12% 1.2rem;
+  border: 1px solid #a2a29b;
+  background:
+    linear-gradient(#bdbdb5, #bdbdb5) 14% 18% / 28% 3px no-repeat,
+    linear-gradient(#686863, #686863) 16% 27% / 42% 1px no-repeat,
+    linear-gradient(#deddd7, #deddd7) 14% 74% / 24% 36% no-repeat,
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 18px,
+      #323230 19px 20px
+    ) 83% 72% / 48% 45% no-repeat,
+    #111;
+  box-shadow: 12px 12px 0 -1px #0b0b0b, 12px 12px 0 #50504c;
+  transform: rotateY(-22deg) rotateX(12deg) rotateZ(-6deg);
+}
+
+#why .aud-card:nth-child(2) .aud-icon::after {
+  inset: 0.3rem 7% 0.3rem;
+  border: 1px dashed #333330;
+  transform: rotateY(-22deg) rotateX(12deg) rotateZ(-6deg);
+}
+
+/* 03. Любой проект: пересечение модульных плоскостей. */
+#why .aud-card:nth-child(3) .aud-icon::before {
+  width: 8.5rem;
+  height: 8.5rem;
+  top: 2.1rem;
+  left: calc(50% - 4.25rem);
+  border: 1px solid #b5b5ad;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 20px,
+      #686862 21px 22px
+    );
+  transform: rotate(-25deg);
+}
+
+#why .aud-card:nth-child(3) .aud-icon::after {
+  width: 8.5rem;
+  height: 8.5rem;
+  top: 2.1rem;
+  left: calc(50% - 4.25rem);
+  border: 1px solid #b5b5ad;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 20px,
+    rgba(222, 221, 215, 0.55) 21px 22px
+  );
+  transform: rotate(25deg);
+}
+
+/* 04. Услуги: непрерывная связь двух элементов. */
+#why .aud-card:nth-child(4) .aud-icon::before,
+#why .aud-card:nth-child(4) .aud-icon::after {
+  width: 6.5rem;
+  height: 9.3rem;
+  top: 1.8rem;
+  border: 1px solid #b3b3ab;
+  border-radius: 5rem;
+  background: repeating-radial-gradient(
+    ellipse at center,
+    transparent 0 7px,
+    rgba(222, 221, 215, 0.4) 8px 9px,
+    transparent 10px 15px
+  );
+}
+
+#why .aud-card:nth-child(4) .aud-icon::before {
+  left: calc(50% - 5.15rem);
+  transform: rotate(-36deg);
+}
+
+#why .aud-card:nth-child(4) .aud-icon::after {
+  left: calc(50% - 1.35rem);
+  transform: rotate(36deg);
+}
+
+/* 05. Бизнес: архитектурная система, а не график обещаний. */
+#why .aud-card:nth-child(5) .aud-icon {
+  perspective: 700px;
+}
+
+#why .aud-card:nth-child(5) .aud-icon::before {
+  width: 8rem;
+  height: 10rem;
+  left: calc(50% - 4rem);
+  top: 1.4rem;
+  border: 1px solid #bab ab2;
+  border-color: #babab2;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 23px,
+      #9a9a92 24px 25px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #141414 0 23px,
+      #777770 24px 25px
+    );
+  transform: rotateY(-32deg) rotateX(15deg) rotateZ(12deg);
+}
+
+#why .aud-card:nth-child(5) .aud-icon::after {
+  width: 8rem;
+  height: 10rem;
+  left: calc(50% - 4rem + 14px);
+  top: calc(1.4rem - 14px);
+  border-top: 1px solid #666660;
+  border-right: 1px solid #666660;
+  transform: rotateY(-32deg) rotateX(15deg) rotateZ(12deg);
+}
+
+/* Единая типографика для всех пяти направлений. */
+#why .aud-card h3,
+#why .aud-card-wide h3 {
+  align-self: stretch;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid var(--why-line);
+  font-family: var(--body);
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.15;
+  letter-spacing: -0.045em;
+  text-transform: none;
+  overflow-wrap: normal;
+  hyphens: auto;
+  color: #eeede8;
+}
+
+#why .aud-card p,
+#why .aud-card-wide p {
+  align-self: stretch;
+  max-width: 43ch;
+  margin: 1rem 0 0;
+  padding: 0;
+  font-size: 0.94rem;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: #a6a6a0;
+  overflow-wrap: break-word;
+  transition: none;
+}
+
+#why .aud-card:hover {
+  border: 0;
+  background: #0b0b0b;
+  box-shadow: none;
+}
+
+#why .aud-card.in:hover {
+  transform: none;
+}
+
+#why .aud-card:hover::before {
+  color: #92928d;
+}
+
+#why .aud-card:hover::after {
+  transform: none;
+}
+
+#why .aud-card:hover .aud-icon {
+  border: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+#why .aud-card:hover p {
+  color: #a6a6a0;
+}
+
+/* Движение только внутри иллюстраций, без прыгающих карточек. */
+@media (hover: hover) and (pointer: fine) {
+  #why .aud-card:nth-child(1):hover .aud-icon::before {
+    transform: rotate(-8deg);
+  }
+
+  #why .aud-card:nth-child(1):hover .aud-icon::after {
+    transform: rotate(8deg);
+  }
+
+  #why .aud-card:nth-child(2):hover .aud-icon::before,
+  #why .aud-card:nth-child(2):hover .aud-icon::after {
+    transform: rotateY(-10deg) rotateX(5deg) rotateZ(-3deg);
+  }
+
+  #why .aud-card:nth-child(3):hover .aud-icon::before {
+    transform: rotate(-40deg);
+  }
+
+  #why .aud-card:nth-child(3):hover .aud-icon::after {
+    transform: rotate(40deg);
+  }
+
+  #why .aud-card:nth-child(4):hover .aud-icon::before {
+    transform: translateX(6px) rotate(-28deg);
+  }
+
+  #why .aud-card:nth-child(4):hover .aud-icon::after {
+    transform: translateX(-6px) rotate(28deg);
+  }
+
+  #why .aud-card:nth-child(5):hover .aud-icon::before,
+  #why .aud-card:nth-child(5):hover .aud-icon::after {
+    transform: rotateY(-18deg) rotateX(8deg) rotateZ(6deg);
+  }
+}
+
+@media (max-width: 979px) {
+  #why .aud-card,
+  #why .aud-card:nth-child(n + 3) {
+    grid-column: span 3;
+    min-height: 29rem;
+  }
+
+  #why .aud-card:last-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: 2rem;
+    min-height: 20rem;
+  }
+
+  #why .aud-card:last-child .aud-icon {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: center;
+    margin: 0;
+  }
+
+  #why .aud-card:last-child h3 {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  #why .aud-card:last-child p {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 639px) {
+  #why .section-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  #why .audience-label {
+    padding-top: 0;
+  }
+
+  #why .audience-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #why .aud-card,
+  #why .aud-card:nth-child(n + 3),
+  #why .aud-card:last-child {
+    display: flex;
+    grid-column: 1;
+    min-height: 0;
+    padding: 1.5rem;
+  }
+
+  #why .aud-card .aud-icon,
+  #why .aud-card:last-child .aud-icon {
+    align-self: stretch;
+    flex-basis: 12.5rem;
+    height: 12.5rem;
+    margin: 1rem 0 1.5rem;
+  }
+
+  #why .aud-card h3,
+  #why .aud-card-wide h3 {
+    font-size: 1.7rem;
+  }
+
+  #why .aud-card p {
+    max-width: none;
+    font-size: 0.94rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #why .aud-card,
+  #why .aud-icon::before,
+  #why .aud-icon::after {
+    transition: none !important;
+  }
+
+  #why .aud-icon::before,
+  #why .aud-icon::after {
+    transform: none !important;
+  }
+}
