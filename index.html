@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kreweb — сайты, которые работают</title>
+  <title>Kreweb | Сайты</title>
   <meta name="description" content="Премиальный веб-дизайн: сайты, которые вызывают доверие, удерживают внимание и превращают посетителей в клиентов." />
   <meta name="theme-color" content="#080808" />
   <link rel="icon" type="image/png" href="assets/favicon.png" />
@@ -21,17 +21,15 @@
   <script src="assets/cms.js" defer></script>
 
   <style>
-    /* ============================================================
-       ТОКЕНЫ — палитра снята с референса «Триумф»
-       ============================================================ */
+    
     :root {
-      --bg:        #080808;   /* фон страницы */
-      --surface:   #212121;   /* карточка */
-      --surface-2: #141414;   /* тёмная карточка / бегущая строка */
+      --bg:        #080808;   
+      --surface:   #212121;   
+      --surface-2: #141414;   
       --line:      rgba(255,255,255,.07);
       --white:     #ffffff;
-      --mute:      #9c9c9c;   /* основной серый текст */
-      --dim:       #6b6b6b;   /* приглушённая часть заголовка */
+      --mute:      #9c9c9c;   
+      --dim:       #6b6b6b;   
 
       --r-sm: 20px;
       --r:    30px;
@@ -40,30 +38,24 @@
       --pad: clamp(16px, 4vw, 60px);
       --max: 1240px;
 
-      /* текст — Onest, заголовки — Geologica. Обе с родной кириллицей.
-         Чтобы вернуть «как у Триумфа», достаточно подставить сюда 'Inter'. */
       --font:    'Onest', -apple-system, Segoe UI, Arial, sans-serif;
       --display: 'Inter', -apple-system, Segoe UI, Arial, sans-serif;
       --ease: cubic-bezier(.16,1,.3,1);
     }
 
     *,*::before,*::after { box-sizing: border-box; }
-    /* clip, а не hidden: hidden ломает position:sticky в липкой стопке */
+    
     html { overflow-x: clip; scroll-behavior: smooth; }
 
-    /* Выделение белым, как в референсе, а не системным синим. */
     ::selection { background-color: #ffffff; color: #080808; }
 
-    /* Клик по пустому месту не должен ставить мигающий курсор ввода
-       и выделять куски интерфейса: выделяется только сам текст. */
     body { -webkit-user-select: none; user-select: none; caret-color: transparent; }
     p, h1, h2, h3, h4, li, blockquote,
     .quote, .quote-mark, .punch, .lead, .label {
       -webkit-user-select: text; user-select: text;
     }
     input, textarea { caret-color: auto; -webkit-user-select: text; user-select: text; }
-    /* Пока Lenis работает, нативный smooth надо выключить — иначе два движка
-       дерутся за одну прокрутку и выходит рывок. Классы вешает сам Lenis. */
+    
     html.lenis { height: auto; }
     .lenis.lenis-smooth { scroll-behavior: auto; }
     .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -87,24 +79,16 @@
     :focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 6px; }
 
     .wrap { width: min(100%, var(--max)); margin-inline: auto; padding-inline: var(--pad); }
-    /* --rhythm, а не --pad: --pad это боковой отступ .wrap, и секция его
-       перебивала — поля прыгали с 16 до 70px на телефоне, карточки ужимались */
+    
     .section { --rhythm: clamp(70px, 10vw, 140px); padding-block: var(--rhythm); position: relative; }
-    /* Ритм между блоками. Одного общего padding мало: секции кончаются
-       по-разному — одна текстом, другая коробкой карточки, и на глаз разрыв
-       гулял от 230 до 325px. Поправки подогнаны замером до ровных ~256px.
-       Отдельно первый блок: над ним бегущая строка упирается в низ экрана,
-       и без добавки он стартовал прямо из-под неё. */
+    
     #audience { padding-top: calc(var(--rhythm) + 128px); }
 
-    /* ---------- Типографика ---------- */
-    /* всё, что крупное и «вывесочное», набрано Geologica */
+    
     .h2, .stack-card h3, .offer h3, .punch {
       font-family: var(--display);
     }
-    /* Фирменный приём «Триумфа»: ровно одна буква в слове — курсивная.
-       У них это голый <em> без единой строчки CSS (браузер сам рисует его
-       курсивом), поэтому в их стилях слова italic и нет. Делаем так же. */
+    
     .hero-title, .logo, .quote-mark .word, .marquee span, .card h3 {
       font-family: 'Inter', var(--font);
     }
@@ -112,7 +96,7 @@
     .marquee em, .card h3 em, .stack-card h3 em {
       font-style: italic;
     }
-    /* курсивная «e» стоит чуть свободнее прямой — подбираем вплотную к «w» */
+    
     .hero-title i, .logo i, .quote-mark .word i { margin-right: -.03em; }
 
     .h2 {
@@ -131,7 +115,6 @@
       color: var(--dim); font-weight: 500; margin-bottom: 18px;
     }
 
-    /* ---------- Кнопка-пилюля ---------- */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 14px;
       background: var(--white); color: #080808;
@@ -150,7 +133,6 @@
     .btn--ghost:hover { background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); }
     .btn--sm { padding: 16px 32px; font-size: 15px; }
 
-    /* ---------- Плейсхолдеры под фото (заменяются на <img>) ---------- */
     .ph {
       position: relative; width: 100%; border-radius: var(--r-sm); overflow: hidden;
       background:
@@ -167,14 +149,10 @@
     }
     .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-    /* ---------- Появление при скролле ---------- */
     .rv { opacity: 0; transform: translateY(26px); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0s); }
     .rv.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } }
 
-    /* ============================================================
-       ХЕДЕР
-       ============================================================ */
     .header {
       position: fixed; inset: 0 0 auto 0; z-index: 60;
       padding-block: 18px;
@@ -186,12 +164,11 @@
     }
     .header-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
     .logo {
-      /* baseline, а не center: у SVG базовая линия — его нижний край,
-         поэтому низ знака садится ровно на базовую линию слова «Kreweb» */
+      
       display: inline-flex; align-items: baseline; gap: 11px;
       font-size: 19px; font-weight: 800; letter-spacing: -.8px;
     }
-    /* знак: стрелка вверх + K. Высота задаётся здесь, ширина считается сама */
+    
     .logo-mark {
       height: 25px; width: auto; flex-shrink: 0;
       color: currentColor;
@@ -204,25 +181,19 @@
     .nav .btn { padding: 12px 26px; font-size: 14px; }
     @media (max-width: 760px) { .nav a:not(.btn) { display: none; } }
 
-    /* ============================================================
-       1. HERO
-       ============================================================ */
     .hero {
       position: relative; min-height: 100svh;
-      /* align-content:end — текст стоит в нижней трети, как у референса,
-         а не по центру экрана. Высоту отступа снизу держим больше бегущей
-         строки, чтобы кнопки на неё не налезали. */
+      
       display: grid; align-content: end; justify-items: center;
       padding: 96px 0 clamp(126px, 19vh, 190px); overflow: hidden; text-align: center;
     }
-    /* круглый вращающийся знак за визуалом — как логотип-печать у референса */
+    
     .hero-seal {
-      /* диаметр меньше статуи, центр считается от её центра —
-         так кругляшка не вылезает за края ни на одном экране */
+      
       position: absolute; left: 50%; translate: -50% 0;
       --seal: min(55vw, 428px);
       --statue-h: min(63vh, 610px, 92vw);
-      /* 0.36 вместо 0.5 — кругляшка сидит выше середины статуи, ближе к стрелке */
+      
       top: calc(clamp(26px, 4.2vh, 72px) + (var(--statue-h) - var(--seal)) * .36);
       width: var(--seal); aspect-ratio: 1;
       animation: spin 50s linear infinite; pointer-events: none;
@@ -231,26 +202,18 @@
     @keyframes spin { to { rotate: 360deg; } }
     @media (prefers-reduced-motion: reduce) { .hero-seal { animation: none; } }
 
-    /* слот под главное фото (статуя / 3D-объект, ч/б) */
     .hero-visual {
-      /* кадрируем от верха, а не от центра: так статуя целиком влезает
-         в экран любой высоты, а текст свободно живёт под ней. */
+      
       position: absolute; top: clamp(26px, 4.2vh, 72px); left: 50%; translate: -50% 0;
-      /* третий аргумент — страховка для узких экранов: пропорция 864/1147
-         означает, что 88vw высоты дают ~66vw ширины, иначе статуя
-         на телефоне разносит экран на всю ширину. */
+      
       height: min(63vh, 610px, 92vw); width: auto;
-      /* контейнер шире картинки (0.89 против 0.753 у неё), поэтому object-fit:contain
-         оставляет поля по бокам. Без них поворот на 7° выносит рукава стрелки
-         за бокс, а маска их срезает. */
+      
       aspect-ratio: .89;
       display: grid; place-items: center; pointer-events: none;
-      /* сдвиг за курсором. translate держит центровку, transform ложится
-         поверх него — порядок свойств в спецификации как раз такой */
+      
       transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
       will-change: transform;
-      /* края растворяем мягко, цоколь показываем целиком —
-         подрезал только самый низ, чтобы он не лежал на фоне доской */
+      
       --m-edges: radial-gradient(82% 80% at 50% 48%, #000 70%, transparent 98%);
       --m-floor: linear-gradient(to bottom,
                    #000 34%, rgba(0,0,0,.42) 56%, rgba(0,0,0,.16) 76%, transparent 94%);
@@ -264,34 +227,23 @@
     .hero-visual::after { content: attr(data-ph); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.14); }
     .hero-visual img {
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
-      /* статуя должна тонуть в фоне, а не спорить с заголовком.
-         Яркость крутится одним числом: 1 — как сгенерировалось, .4 — почти тень. */
-      /* только поворот, без зума: при scale картинка вылезала выше контейнера,
-         а маска (mask-repeat: no-repeat) срезала всё, что за его пределами —
-         от этого и был обрубленный кончик. */
-      /* к базовому наклону добавляется доля от курсора — статуя чуть
-         доворачивается в его сторону, а не просто ездит плашкой */
+
+      
       transform: rotate(calc(-7deg + var(--tilt, 0deg)));
       filter: grayscale(1) contrast(1.12) brightness(var(--hero-dim, .45));
     }
 
-    /* Колонны по краям первого экрана. Приём как у референса: один тихий слой
-       под всем содержимым с прозрачностью 30% — его не разглядывают, он даёт
-       глубину. Вторая колонна — зеркало первой, второго файла не нужно.
-       Верх и низ растворены в самом PNG, поэтому обрезов не видно. */
     .hero-col {
       position: absolute; top: -9%; height: 118%; width: auto;
       z-index: 0; pointer-events: none; user-select: none;
-      /* у референса здесь .3, но их розы сами по себе светлее; наша колонна —
-         почти чёрный силуэт (медиана 19), ей нужно больше, чтобы читался ствол,
-         а не только рёбра каннелюр */
+      
       opacity: var(--col-op, .45);
       transform-origin: 50% 100%;
     }
     .hero-col--l { left: -3%;  transform: rotate(-6deg); }
     .hero-col--r { right: -3%; transform: scaleX(-1) rotate(-6deg); }
     @media (max-width: 900px) {
-      /* на узком экране колонны лезли бы в заголовок — сажаем ниже и тише */
+      
       .hero-col { top: auto; bottom: -5%; height: 64%; --col-op: .3; }
       .hero-col--l { left: -4%; }
       .hero-col--r { right: -4%; }
@@ -304,11 +256,10 @@
     }
     .hero-sub {
       color: var(--mute); font-size: clamp(15px,1.6vw,18px);
-      margin: 16px auto 0; max-width: 56ch; /* длинный текст не должен тянуться во всю ширину */
+      margin: 16px auto 0; max-width: 56ch; 
     }
     .hero-cta { margin-top: 42px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
-    /* бегущая строка */
     .marquee {
       position: relative; overflow: hidden; width: 100%;
       -webkit-user-select: none; user-select: none; pointer-events: none;
@@ -323,15 +274,11 @@
     @keyframes slide { to { transform: translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 
-    /* ============================================================
-       2. ЗАЧЕМ НУЖЕН САЙТ — 3 карточки
-       ============================================================ */
     .cards-3 {
       margin-top: clamp(36px, 5vw, 64px);
       display: grid; gap: 18px;
       grid-template-columns: repeat(3, 1fr);
-      /* Фотоподложка на все три карточки — тёмный зал за объектом.
-         Готовится скриптом prep-card-bg.py: размытие, виньетка, тёмный верх. */
+      
       --card-bg: url(assets/card-bg.webp);
     }
     .card {
@@ -339,75 +286,59 @@
       padding: clamp(26px, 3vw, 40px) clamp(20px,2.4vw,32px) 0;
       text-align: center; overflow: hidden;
       display: flex; flex-direction: column;
-      /* isolation — чтобы подложка с z-index:-1 не ушла за пределы карточки:
-         она должна лечь поверх её фона, но под текст и объект */
+      
       position: relative; isolation: isolate;
       transition: transform .6s var(--ease), background .4s;
     }
     .card:hover { transform: translateY(-5px); background: #262626; }
 
-    /* Подложка карточки. У «Триумфа» это одна фотография на все карточки —
-       тёмный зал, сильно размытый, поверх фона карточки с opacity .4, а объект
-       лежит выше. Ровно так же здесь: ::before — световая сцена на градиентах,
-       она работает всегда; ::after — та самая фотоподложка, она появляется,
-       как только карточке задан --card-bg. */
     .card::before, .card::after {
       content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     }
     .card::before {
       background:
-        /* свет из глубины, прямо за объектом */
+        
         radial-gradient(72% 46% at 50% 70%, rgba(255,255,255,.115), transparent 72%),
-        /* подсвеченный пол под объектом */
+        
         linear-gradient(to top, rgba(255,255,255,.06), transparent 42%);
     }
     .card::after {
       background-image:
-        /* верх гасим под заголовок */
+        
         linear-gradient(to bottom, rgba(0,0,0,.94), rgba(0,0,0,.72) 24%, transparent 56%),
-        /* и края — иначе в скруглённой карточке виден прямой край фотографии.
-           Градиентом, а не в самой картинке: cover кадрирует её по-разному
-           на десктопе и на мобильном, запечённая виньетка уезжает за край */
+        
         radial-gradient(62% 54% at 50% 54%, transparent 18%, rgba(0,0,0,1)),
         var(--card-bg, none);
       background-size: cover; background-position: center, center, center 58%;
       background-repeat: no-repeat;
-      opacity: .4;                       /* как в референсе */
+      opacity: .4;                       
     }
     .card h3 { font-size: clamp(22px,2.4vw,32px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; }
     .card p { color: var(--mute); font-size: 15px; line-height: 1.5; margin-top: 14px; }
     .card .ph {
       margin-top: auto; border-radius: 0; background: none; box-shadow: none;
-      /* ровно пропорция холста картинок (900×885): поля и нижняя линия
-         у всех трёх объектов зашиты в сам PNG, поэтому они совпадают */
+      
       aspect-ratio: 1/.983;
-      /* во всю ширину карточки: внутри PNG свои поля в 20–33px, так что
-         объект крупнее, а до края карточки всё равно остаётся воздух */
-      /* width:auto обязателен: базовое width:100% не даёт отрицательным
-         полям растянуть блок, они бы просто выдвинули его за край */
+
       width: auto;
       margin-inline: calc(clamp(20px,2.4vw,32px) * -1);
     }
     .card .ph::after { color: rgba(255,255,255,.2); }
-    /* никакого brightness: он поднимает тени и даёт серую кашу. Диапазон
-       растянут в самой картинке (prep-object.py), здесь только обесцвечивание */
+    
     .card .ph img { object-fit: contain; filter: grayscale(1); }
     @media (max-width: 900px) { .cards-3 { grid-template-columns: 1fr; } }
 
-    /* Финальная фраза блока. Собрана из слов: каждое слово лежит в своей
-       маске и выезжает из-под неё с задержкой — строка проявляется слева
-       направо. */
     .punch {
       margin-top: clamp(56px,7vw,112px); text-align: center;
       font-size: clamp(21px,2.9vw,33px); line-height: 1.3; letter-spacing: -1.2px;
       font-weight: 400; color: var(--dim); max-width: 820px; margin-inline: auto;
     }
-    /* общий эффект .rv тут не нужен — своё появление поштучно, по словам */
+    
     .punch.rv { opacity: 1; transform: none; }
     .punch b { color: var(--white); font-weight: 700; }
     .punch .w {
       display: inline-block; overflow: hidden;
-      /* маска режет по боксу строки, поэтому даём запас под хвосты у, д, р */
+      
       padding-bottom: .14em; margin-bottom: -.14em;
     }
     .punch .w > span {
@@ -420,9 +351,6 @@
       .punch .w > span { transform: none; }
     }
 
-    /* ============================================================
-       3. ДЛЯ КОГО — горизонтальная лента карточек
-       ============================================================ */
     .rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
     .rail-nav { display: flex; gap: 10px; flex-shrink: 0; }
     .rail-btn {
@@ -437,14 +365,10 @@
     .rail {
       display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
       margin-top: clamp(28px,4vw,48px);
-      /* Лента вынесена из .wrap и идёт во всю ширину секции. Левый отступ
-         повторяет колонку, поэтому первая карточка стоит ровно под
-         заголовком; справа лента доходит до края окна — обрез приходится
-         на границу экрана, а не посреди полотна, как было. */
+      
       padding-left: max(var(--pad), calc((100% - var(--max)) / 2 + var(--pad)));
       padding-right: var(--pad);
-      /* без этого снэп прижимает первую карточку к краю контейнера и съедает
-         левый отступ — лента сама подскролливается при загрузке */
+      
       scroll-padding-left: max(var(--pad), calc((100% - var(--max)) / 2 + var(--pad)));
       scrollbar-width: none; cursor: grab;
     }
@@ -452,16 +376,13 @@
     .rail.dragging { cursor: grabbing; scroll-snap-type: none; }
     .rail.dragging * { pointer-events: none; }
     .rail > .card { flex: 0 0 clamp(260px, 30vw, 380px); scroll-snap-align: start; }
-    /* холст у объектов ленты ниже (900×790), чем в блоке 2 — пропорция своя */
+    
     .rail .card .ph { aspect-ratio: 1/.878; }
-    /* та же фотоподложка за объектом, что и в карточках второго блока */
+    
     .rail { --card-bg: url(assets/card-bg.webp); }
 
-    /* ============================================================
-       3. ЦИФРЫ — наклонённые карточки
-       ============================================================ */
     .ach { display: grid; grid-template-columns: 1fr .95fr; gap: clamp(28px,4vw,64px); align-items: center; }
-    /* тонкие вертикальные полосы на фоне — как в референсе, задают «техничность» */
+    
     #diff::before {
       content: ''; position: absolute; inset: 0; pointer-events: none;
       background: repeating-linear-gradient(90deg,
@@ -478,11 +399,10 @@
     .ach-card {
       position: absolute; width: clamp(205px, 23vw, 300px);
       padding: clamp(18px,2vw,26px) clamp(20px,2.2vw,30px) clamp(19px,2.2vw,27px);
-      /* одинаковая высота у всех трёх: подписи разной длины иначе дают
-         карточки разного роста, и каскад читается кривым */
+      
       min-height: clamp(150px, 14vw, 186px);
       border-radius: 24px; border: 1px solid rgba(255,255,255,.09);
-      /* блик по верхней грани плюс глухая подложка — стекло на тёмном */
+      
       background:
         linear-gradient(150deg, rgba(255,255,255,.11), rgba(255,255,255,.03) 45%, rgba(255,255,255,0) 72%),
         #161616;
@@ -490,9 +410,7 @@
       transform: rotate(-13deg) translateY(var(--cy, 0px));
       will-change: transform;
     }
-    /* Ровный каскад: одинаковый шаг вниз и вправо на каждой ступени.
-       Раньше первая и третья стояли почти на одной вертикали, а вторая
-       торчала вбок — от этого ряд и выглядел кривым. */
+    
     .ach-card:nth-child(1) { top: 0;   right: 36%; }
     .ach-card:nth-child(2) { top: 32%; right: 18%; }
     .ach-card:nth-child(3) { top: 64%; right: 0;   }
@@ -510,9 +428,6 @@
       .ach-card:nth-child(3) { transform: rotate(-1.5deg); }
     }
 
-    /* ============================================================
-       5. ПУТЬ — липкая стопка карточек
-       ============================================================ */
     .stack-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(24px,4vw,70px); align-items: start; }
     .stack-aside { position: sticky; top: 26vh; align-self: start; }
     .stack-aside .h2 { margin-bottom: 32px; }
@@ -525,15 +440,10 @@
       box-shadow: 0 -24px 60px rgba(0,0,0,.55);
       overflow: hidden;
     }
-    /* Карточки стопки слегка завалены в разные стороны — пачка выглядит
-       сложенной руками, а не выровненной по линейке. Через rotate, а не
-       transform: sticky от этого не ломается, и transform остаётся свободным. */
+    
     .stack-card:nth-child(odd)  { rotate: -1.2deg; }
     .stack-card:nth-child(even) { rotate: 1.2deg; }
-    /* Каждая вторая карточка светлая. В стопке, где карточки наезжают одна
-       на другую, это главный ориентир: видно, что приехала новая, а не
-       сдвинулась старая. Объект один и тот же — тёмный металл на белом
-       читается силуэтом, на тёмном фактурой. */
+    
     .stack-card:nth-child(even) { background: #f1f1f1; }
     .stack-card:nth-child(even) h3 { color: #0d0d0d; }
     .stack-card:nth-child(even) h3 em { color: #8c8c8c; }
@@ -550,17 +460,11 @@
       .stack-grid { grid-template-columns: 1fr; }
       .stack-aside { position: static; }
       .stack-card { grid-template-columns: 1fr; min-height: 0; }
-      /* слот остаётся квадратным: при 1/.5 колонна вписывалась по высоте
-         и превращалась в полоску шириной в палец */
+      
       .stack-card .ph { width: clamp(150px, 46vw, 230px); aspect-ratio: 1; margin-inline: auto; }
     }
 
-    /* ============================================================
-       6. ПРОЕКТЫ — лента
-       ============================================================ */
-    /* Один кейс крупно. Лента из трёх, где два — заглушки «скоро», честно
-       говорила: проект всего один. Крупный кадр говорит то же самое, но
-       как уверенность, а не как извинение. */
+    
     .case {
       display: grid; grid-template-columns: 1.3fr .7fr;
       gap: clamp(24px,3.4vw,56px); align-items: center;
@@ -580,15 +484,11 @@
     .case-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: clamp(22px,2.6vw,32px); }
     @media (max-width: 900px) { .case { grid-template-columns: 1fr; } }
 
-    /* окно с отзывом */
     .lightbox { border: 0; padding: 0; background: transparent; max-width: min(92vw, 560px); }
     .lightbox::backdrop { background: rgba(0,0,0,.82); }
     .lightbox img { display: block; width: 100%; height: auto; border-radius: 14px; }
     .lightbox-hint { color: var(--dim); font-size: 13px; text-align: center; margin-top: 14px; }
 
-    /* ============================================================
-       7. ОФФЕР
-       ============================================================ */
     .offer {
       position: relative; margin-top: clamp(36px,5vw,60px);
       background: var(--surface); border-radius: var(--r);
@@ -599,10 +499,7 @@
     .offer h3 { font-size: clamp(30px,4.4vw,56px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.05; }
     .offer p { color: var(--mute); font-size: clamp(14px,1.4vw,16px); margin-top: 22px; max-width: 38ch; line-height: 1.5; }
     .offer-row { display: flex; align-items: center; gap: clamp(16px,2.5vw,34px); margin-top: clamp(32px,4vw,56px); flex-wrap: wrap; }
-    /* Цена набрана текстом и размыта. Блюр не прячет строку: цифра лежит
-       в разметке и читается в коде страницы — это осознанно. Нужен намёк
-       на порядок суммы, точную назову в переписке. Сумма — одной строкой
-       в разметке ниже, в CSS её нет. */
+    
     .price-mask {
       font-family: var(--display);
       font-size: clamp(34px,4.6vw,58px); font-weight: 800;
@@ -611,16 +508,11 @@
       filter: blur(10px);
       user-select: none; -webkit-user-select: none;
     }
-    /* .offer p сильнее по специфичности и навязывал свои 38ch —
-       подпись растягивалась и выдавливала кнопку на следующую строку */
+    
     .offer .price-note { color: var(--mute); font-size: 14px; line-height: 1.4; max-width: 26ch; margin-top: 0; }
-    /* подпись под маской, а не сбоку: вместе они занимали всю строку
-       и выдавливали кнопку на следующую */
+    
     .price-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-    /* Вместо объекта — три возражения, из-за которых обычно не пишут.
-       Нативный <details>: раскрывается без JS и работает с клавиатуры.
-       У .faq-i > p два класса в селекторе, иначе .offer p навяжет свои
-       margin-top: 22px и 38ch. */
+    
     .faq { display: grid; }
     .faq-i { border-top: 1px solid var(--line); }
     .faq-i:last-child { border-bottom: 1px solid var(--line); }
@@ -632,7 +524,7 @@
     }
     .faq-i summary::-webkit-details-marker { display: none; }
     .faq-i summary:hover { opacity: .62; }
-    /* плюс, который на раскрытии доворачивается в крестик */
+    
     .faq-i summary::after {
       content: ''; flex: none; width: 13px; height: 13px;
       background:
@@ -647,9 +539,6 @@
     }
     @media (max-width: 900px) { .offer { grid-template-columns: 1fr; } }
 
-    /* ============================================================
-       ФУТЕР
-       ============================================================ */
     .footer { border-top: 1px solid var(--line); padding-block: clamp(44px,5vw,72px) 28px; }
     .footer-top {
       display: grid; grid-template-columns: 1.6fr .7fr .8fr; gap: clamp(30px,4vw,60px);
@@ -657,8 +546,7 @@
     }
     .footer-brand .logo { margin-bottom: 20px; }
     .footer-note { color: var(--mute); font-size: 15px; line-height: 1.55; max-width: 36ch; }
-    /* строка загрузки: точка белая, а не зелёная — вся палитра сайта
-       чёрно-белая, цветной маркер выбивался бы единственным пятном */
+    
     .footer-status {
       display: inline-flex; align-items: center; gap: 10px;
       margin-top: 20px; font-size: 14px; color: var(--white);
@@ -687,14 +575,12 @@
       .footer-top { grid-template-columns: 1fr 1fr; }
       .footer-brand { grid-column: 1 / -1; }
     }
-    /* на телефоне нижняя строка упиралась в плавающую кнопку «наверх»:
-       раскладываем её в столбик и добавляем воздух под кнопку */
+    
     @media (max-width: 560px) {
       .footer { padding-bottom: 88px; }
       .footer-in { flex-direction: column; align-items: flex-start; gap: 8px; }
     }
 
-    /* кнопка «наверх» */
     .to-top {
       position: fixed; right: 22px; bottom: 22px; z-index: 70;
       width: 50px; height: 50px; border-radius: 50%;
@@ -714,8 +600,7 @@
   <header class="header" id="header">
     <div class="wrap header-in">
       <a class="logo" href="#top">
-        <!-- viewBox подрезан ровно по контуру: низ знака = y 67, правый край = 46.3.
-             Пустое поле внизу сдвигало бы знак относительно базовой линии. -->
+        
         <svg class="logo-mark" viewBox="0 0 46.6 67" fill="none" stroke="currentColor" stroke-linejoin="miter" aria-hidden="true">
           <path d="M3.8 23.5 L23.2 7.2 L42.6 23.5" stroke-width="10.5"/>
           <path d="M23.2 12 L23.2 31" stroke-width="6"/>
@@ -735,7 +620,6 @@
 
   <main id="top">
 
-    <!-- ========== 1. HERO ========== -->
     <section class="hero">
       <img class="hero-col hero-col--l" src="assets/hero-column.webp" alt=""
            width="355" height="1500" aria-hidden="true" />
@@ -747,19 +631,13 @@
         <text><textPath href="#circlePath">KREWEB • САЙТЫ, КОТОРЫЕ РАБОТАЮТ • KREWEB • САЙТЫ, КОТОРЫЕ РАБОТАЮТ • </textPath></text>
       </svg>
 
-      <!-- Статуя. Класть файл как assets/hero-statue.jpg и раскомментировать <img>.
-           Фон у картинки может быть просто чёрным — края растворяет радиальная маска
-           в .hero-visual, вырезать ничего не нужно.
-           Яркость: --hero-dim на .hero-visual (по умолчанию .55). -->
       <div class="hero-visual" aria-hidden="true">
         <img src="assets/hero-statue.webp" alt="" width="864" height="1147" fetchpriority="high" />
       </div>
 
       <div class="wrap hero-in">
         <h1 class="hero-title">Kr<i>e</i>web</h1>
-        <!-- Без data-key: подзаголовок снят с CMS намеренно. Пока он был на ключе,
-             база перезаписывала его своим старым текстом через секунду после загрузки.
-             Правится прямо здесь. -->
+        
         <p class="hero-sub">Сайты под ключ, которые приводят клиентов</p>
         <div class="hero-cta">
           <a class="btn" href="https://t.me/cremikr" target="_blank" rel="noopener">
@@ -778,7 +656,6 @@
       </div>
     </section>
 
-    <!-- ========== 2. ЗАЧЕМ НУЖЕН САЙТ ========== -->
     <section class="section" id="audience">
       <div class="wrap">
         <p class="label rv" data-key="audience_label">Зачем нужен сайт?</p>
@@ -807,9 +684,6 @@
           </article>
         </div>
 
-        <!-- Без data-key: фраза снята с CMS намеренно. Внутри разметка —
-             слова для анимации и курсивная буква, а загрузчик кладёт в элемент
-             textContent и стёр бы её целиком. -->
         <p class="punch rv">
           <span class="w" style="--i:0"><span>Показать</span></span>
           <span class="w" style="--i:1"><span>себя</span></span>
@@ -827,7 +701,6 @@
       </div>
     </section>
 
-    <!-- ========== 3. ЦИФРЫ ========== -->
     <section class="section" id="diff">
       <div class="wrap ach">
         <div>
@@ -843,7 +716,6 @@
       </div>
     </section>
 
-    <!-- ========== 4. ДЛЯ КОГО — лента ========== -->
     <section class="section" id="why">
       <div class="wrap">
         <div class="rail-head rv">
@@ -888,7 +760,6 @@
       </div>
     </section>
 
-    <!-- ========== 5. ПУТЬ — липкая стопка ========== -->
     <section class="section" id="process">
       <div class="wrap stack-grid">
         <aside class="stack-aside">
@@ -946,7 +817,6 @@
       </div>
     </section>
 
-    <!-- ========== 6. КЕЙС ========== -->
     <section class="section" id="projects">
       <div class="wrap">
         <p class="label rv" data-key="projects_label">Кейсы</p>
@@ -978,7 +848,6 @@
       <p class="lightbox-hint">Нажмите мимо окна, чтобы закрыть</p>
     </dialog>
 
-    <!-- ========== 7. ОФФЕР ========== -->
     <section class="section" id="contact">
       <div class="wrap">
         <h2 class="h2 h2--center rv">
@@ -1070,10 +939,6 @@
     (() => {
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      /* --- плавный скролл ---
-         Настройки те же, что у референса: lerp .05 (вдвое ниже дефолтных .1 —
-         отсюда тяжёлая, чуть замедленная прокрутка), множитель колеса 1.
-         Если библиотека не загрузилась, страница просто скроллится нативно. */
       let lenis = null;
       const goTo = (target) => {
         if (lenis) lenis.scrollTo(target);
@@ -1088,7 +953,6 @@
         requestAnimationFrame(raf);
       });
 
-      /* якоря ведём тем же движком: нативный переход поверх плавного даёт рывок */
       document.querySelectorAll('a[href^="#"]').forEach((a) => {
         const id = a.getAttribute('href');
         if (id === '#') return;
@@ -1100,17 +964,14 @@
         });
       });
 
-      /* --- появление при скролле --- */
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
-          // не unobserve: класс снимается обратно, и при прокрутке вверх
-          // блок уезжает так же, как приезжал
+
           e.target.classList.toggle('in', e.isIntersecting);
         });
       }, { rootMargin: '0px 0px -12% 0px', threshold: .08 });
       document.querySelectorAll('.rv').forEach((el) => io.observe(el));
 
-      /* --- шапка при скролле + кнопка наверх --- */
       const header = document.getElementById('header');
       const toTop = document.getElementById('to-top');
       const onScroll = () => {
@@ -1122,17 +983,11 @@
       onScroll();
       toTop.addEventListener('click', () => goTo(0));
 
-      /* --- статуя тянется за курсором ---
-         Только мышь: на тач-устройствах наведения нет, а дёргать картинку
-         от касания незачем. Курсор ловим по всему первому экрану, а не по
-         самой статуе: у неё pointer-events:none и она стоит за заголовком,
-         так что навестись точно на неё нельзя, а от края экрана движение
-         читается мягче. */
       const hero = document.querySelector('.hero');
       const visual = document.querySelector('.hero-visual');
       if (hero && visual && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        const SHIFT_X = 16, SHIFT_Y = 9, TILT = 1.3;   // амплитуда: видно, но спокойно
-        const EASE = .055;                             // доля пути за кадр — отсюда мягкость
+        const SHIFT_X = 16, SHIFT_Y = 9, TILT = 1.3;
+        const EASE = .055;
         let toX = 0, toY = 0, x = 0, y = 0, frame = 0;
 
         const step = () => {
@@ -1141,7 +996,7 @@
           visual.style.setProperty('--mx', (x * SHIFT_X).toFixed(2) + 'px');
           visual.style.setProperty('--my', (y * SHIFT_Y).toFixed(2) + 'px');
           visual.style.setProperty('--tilt', (x * TILT).toFixed(3) + 'deg');
-          // кадры не крутим вхолостую: доехала — засыпаем до следующего движения
+
           frame = (Math.abs(toX - x) > 4e-4 || Math.abs(toY - y) > 4e-4)
             ? requestAnimationFrame(step) : 0;
         };
@@ -1157,10 +1012,6 @@
         hero.addEventListener('pointerleave', () => { toX = toY = 0; wake(); });
       }
 
-      /* --- карточки с цифрами ведутся прокруткой ---
-         У каждой своя амплитуда: карточки расходятся по скорости и за счёт
-         этого читаются как разные планы, а не как одна наклейка. Позиция —
-         функция от прокрутки, поэтому вверх всё отыгрывается назад. */
       const achCards = [...document.querySelectorAll('.ach-card')];
       if (achCards.length && !reduce) {
         const stack = achCards[0].parentElement;
@@ -1170,7 +1021,7 @@
           pending = false;
           if (innerWidth < 900) { achCards.forEach((c) => c.style.removeProperty('--cy')); return; }
           const r = stack.getBoundingClientRect();
-          // -1 когда блок внизу экрана, +1 когда ушёл вверх
+
           const p = Math.max(-1, Math.min(1,
             (innerHeight / 2 - (r.top + r.height / 2)) / (innerHeight / 2 + r.height / 2)));
           achCards.forEach((c, i) => c.style.setProperty('--cy', (p * AMP[i]).toFixed(1) + 'px'));
@@ -1182,13 +1033,11 @@
         apply();
       }
 
-      /* --- окно с отзывом --- */
       const reviewBox = document.getElementById('review-box');
       document.getElementById('review-open')?.addEventListener('click', () => reviewBox.showModal());
-      // клик по затемнению: цель события — сам dialog, а не его содержимое
+
       reviewBox?.addEventListener('click', (e) => { if (e.target === reviewBox) reviewBox.close(); });
 
-      /* --- ленты: стрелки, перетаскивание, состояние кнопок --- */
       document.querySelectorAll('.rail').forEach((rail) => {
         const name = rail.id.replace('rail-', '');
         const btns = [...document.querySelectorAll(`[data-rail="${name}"]`)];
@@ -1225,6 +1074,6 @@
         rail.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = 0; } }, true);
       });
     })();
-  </script>
+</script>
 </body>
 </html>
